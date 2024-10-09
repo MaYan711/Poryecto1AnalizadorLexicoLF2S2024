@@ -1,9 +1,11 @@
 
 package ipc1.analizadorlexico;
 
+import ipc1.analizadorlexico.ManejadorReportes.TokenError;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.*;
 
 
@@ -187,7 +189,14 @@ public class AnalizadorFrame extends javax.swing.JFrame {
 
     
     private void btnReporteErrorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteErrorActionPerformed
-  
+        String textoEntrada = textoIntro.getText();
+        Manejador manejador = new Manejador(textoEntrada);
+
+        String rutaCarpeta = "C:\\Users\\LL829\\Desktop\\PRUEBAHTML";
+        String nombreArchivo = "reporte_error.html";
+
+        manejador.generarReporteErrores(rutaCarpeta, nombreArchivo);
+        System.out.println("Reporte de errores generado correctamente.");
     }//GEN-LAST:event_btnReporteErrorActionPerformed
 
     

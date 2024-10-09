@@ -1,5 +1,6 @@
  package ipc1.analizadorlexico;
 
+import ipc1.analizadorlexico.ManejadorReportes.TokenError;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,10 @@ public class Reporte {
     private List<Token> tokens;
     private List<Token> listaDeTokens;
     
+   
+    
     private final List<Token> listaDeErrores;
-    
-    
+     
 
     public Reporte() {
         tokens = new ArrayList<>();

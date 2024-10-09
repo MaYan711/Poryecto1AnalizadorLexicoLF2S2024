@@ -1,8 +1,12 @@
 package ipc1.analizadorlexico;
 
+import ipc1.analizadorlexico.ManejadorReportes.TokenError;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+import java.util.List;
 
 public class Manejador {
 
@@ -173,12 +177,65 @@ public class Manejador {
         e.printStackTrace();
     }
 }
-    
-    
+     public void generarReporteErrores(String rutaCarpeta, String nombreArchivo) {
+    try {
+            File carpeta = new File(rutaCarpeta);
+            if (!carpeta.exists()) {
+                System.out.println("La carpeta especificada no existe.");
+                return;
+            }
+
+            String rutaCompleta = rutaCarpeta + File.separator + nombreArchivo;
+            StringBuilder htmlBuilder = new StringBuilder();
+            htmlBuilder.append("<!DOCTYPE html>\n");
+            htmlBuilder.append("<html lang=\"en\">\n");
+            htmlBuilder.append("<head>\n");
+            htmlBuilder.append("    <meta charset=\"UTF-8\">\n");
+            htmlBuilder.append("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
+            htmlBuilder.append("    <title>Reporte de Errores</title>\n");
+            htmlBuilder.append("    <style>\n");
+            htmlBuilder.append("        table { border-collapse: collapse; width: 100%; }\n");
+            htmlBuilder.append("        th, td { border: 1px solid black; padding: 8px; text-align: left; }\n");
+            htmlBuilder.append("        th { background-color: #f2f2f2; }\n");
+            htmlBuilder.append("    </style>\n");
+            htmlBuilder.append("</head>\n");
+            htmlBuilder.append("<body>\n");
+            htmlBuilder.append("<h2>Reporte de Errores Léxicos</h2>\n");
+            htmlBuilder.append("<table>\n");
+            htmlBuilder.append("    <tr>\n");
+            htmlBuilder.append("        <th>TOKEN</th>\n");
+            htmlBuilder.append("        <th>LENGUAJE DONDE SE ENCONTRÓ</th>\n");
+            htmlBuilder.append("        <th>FILA</th>\n");
+            htmlBuilder.append("        <th>COLUMNA</th>\n");
+            htmlBuilder.append("        <th>LENGUAJE SUGERIDO</th>\n");
+            htmlBuilder.append("    </tr>\n");
+
+            for (Token error : reporte.getListaDeTokens()) {
+                htmlBuilder.append("    <tr>\n");
+                htmlBuilder.append("        <td>").append(error.getToken()).append("</td>\n");
+              //  htmlBuilder.append("        <td>").append(error.getLenguajeEncontrado() != null ? error.getLenguajeEncontrado() : "No especificado").append("</td>\n");
+                htmlBuilder.append("        <td>").append(error.getLenguajeSugerido()).append("</td>\n");
+                htmlBuilder.append("        <td>").append(error.getFila()).append("</td>\n");
+                htmlBuilder.append("        <td>").append(error.getColumna()).append("</td>\n");
+                htmlBuilder.append("    </tr>\n");
+            }
+
+            htmlBuilder.append("</table>\n");
+            htmlBuilder.append("</body>\n");
+            htmlBuilder.append("</html>");
+
+            try (FileWriter writer = new FileWriter(rutaCompleta, StandardCharsets.UTF_8)) {
+                writer.write(htmlBuilder.toString());
+                System.out.println("Archivo HTML generado exitosamente en: " + rutaCompleta);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+}
     
 
 
-    // Método que retorna todo el contenido CSS, JS, y HTML, tal como fue ingresado
+    
     public String getHtmlOrdenado() {
         return ">>[css]\n" + cssContent + "\n\n" +
                ">>[js]\n" + jsContent + "\n\n" +
@@ -186,6 +243,6 @@ public class Manejador {
     }
 
     private Iterable<Token> getListaDeErrores() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }     
