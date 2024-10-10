@@ -18,18 +18,26 @@ public class Manejador {
     private String htmlContent = "";
     
     private Reporte reporte;
+    private AnalizadorCodigo optimizador;
 
     public Manejador(String textoEntrada) {
         this.textoEntrada = textoEntrada;
         this.reporte = new Reporte();
+        this.optimizador = new AnalizadorCodigo();
         analizar();
     }
 
     private void analizar() {
         separarLenguajes();  
 
-    System.out.println("Contenido JS: " + jsContent);
-    System.out.println("Contenido HTML: " + htmlContent);
+        
+        cssContent = optimizador.optimizarCodigo(cssContent);
+        jsContent = optimizador.optimizarCodigo(jsContent);
+        htmlContent = optimizador.optimizarCodigo(htmlContent);
+        System.out.println("Contenido JS (Optimizado): " + jsContent);
+        System.out.println("Contenido HTML (Optimizado): " + htmlContent);
+        
+   
 
     String patronPalabraReservadaJS = "\\b(function|let|var|if|else|for|while|return)\\b";
     String patronIdentificadorJS = "[a-zA-Z]([a-zA-Z]|[0-9]|[_])*";
