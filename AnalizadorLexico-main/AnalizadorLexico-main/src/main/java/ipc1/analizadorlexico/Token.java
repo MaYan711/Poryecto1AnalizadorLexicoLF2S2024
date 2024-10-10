@@ -21,7 +21,7 @@ public class Token {
         this.lenguajeSugerido = lenguajeSugerido;
     }
 
-    // Getters para acceder a los atributos
+    
     public String getToken() {
         return token;
     }

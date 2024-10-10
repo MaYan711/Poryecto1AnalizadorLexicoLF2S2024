@@ -68,7 +68,7 @@ public class Reporte {
         reporteHtml.append("</tr>");
     }
 
-    // Cerrar la tabla
+    
     reporteHtml.append("</table>");
 
     return reporteHtml.toString();

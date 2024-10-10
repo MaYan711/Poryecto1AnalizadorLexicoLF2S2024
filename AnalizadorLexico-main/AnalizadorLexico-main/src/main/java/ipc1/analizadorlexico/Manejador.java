@@ -51,7 +51,7 @@ public class Manejador {
         String seccionActual = "";
 
         for (String linea : lineas) {
-            // Verificar en qué sección estamos
+            
             if (linea.startsWith(">>[css]")) {
                 seccionActual = "css";
             } else if (linea.startsWith(">>[js]")) {
@@ -59,7 +59,7 @@ public class Manejador {
             } else if (linea.startsWith(">>[html]")) {
                 seccionActual = "html";
             } else {
-                // Añadir las líneas de contenido a la sección correspondiente
+                
                 if (seccionActual.equals("css")) {
                     cssBuilder.append(linea).append("\n");
                 } else if (seccionActual.equals("js")) {
@@ -70,7 +70,7 @@ public class Manejador {
             }
         }
 
-        // Almacenar los contenidos procesados
+       
         cssContent = cssBuilder.toString().trim();
         jsContent = jsBuilder.toString().trim();
         htmlContent = htmlBuilder.toString().trim();
@@ -84,10 +84,10 @@ public class Manejador {
                 return;
             }
 
-            // Construir la ruta completa del archivo
+            
             String rutaCompleta = rutaCarpeta + File.separator + nombreArchivo;
 
-            // Generar el contenido HTML con secciones
+        
             String htmlFinal =
                 "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
@@ -97,20 +97,20 @@ public class Manejador {
                 "    <title>Document</title>\n" +
                 "    <style>\n" +
                 "    /* Aquí todo el lenguaje CSS */\n" +
-                cssContent +  // Sección CSS
+                cssContent +  
                 "    </style>\n" +
                 "    <script>\n" +
                 "    /* Aquí todo el lenguaje JavaScript */\n" +
-                jsContent +  // Sección JS
+                jsContent +  
                 "    </script>\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "    /* Aquí todo el lenguaje HTML */\n" +
-                htmlContent +  // Sección HTML
+                htmlContent +  
                 "\n</body>\n" +
                 "</html>";
 
-            // Intentar escribir el archivo
+            
             try (FileWriter writer = new FileWriter(rutaCompleta)) {
                 writer.write(htmlFinal);
                 System.out.println("Archivo HTML generado exitosamente en: " + rutaCompleta);
@@ -200,7 +200,7 @@ public class Manejador {
             htmlBuilder.append("    </style>\n");
             htmlBuilder.append("</head>\n");
             htmlBuilder.append("<body>\n");
-            htmlBuilder.append("<h2>Reporte de Errores Léxicos</h2>\n");
+            htmlBuilder.append("<h2>REPORTE ERRORES</h2>\n");
             htmlBuilder.append("<table>\n");
             htmlBuilder.append("    <tr>\n");
             htmlBuilder.append("        <th>TOKEN</th>\n");
