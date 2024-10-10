@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Manejador {
 
@@ -19,37 +21,57 @@ public class Manejador {
 
     public Manejador(String textoEntrada) {
         this.textoEntrada = textoEntrada;
-        
         this.reporte = new Reporte();
         analizar();
     }
 
     private void analizar() {
-        separarLenguajes();
-         reporte.agregarToken(new Token("function", "[a-zA-Z]+", "Javascript", "Palabra Reservada", 2, 1));
-        reporte.agregarToken(new Token("sendForm", "[a-zA-Z]([a-zA-Z]|[0-9]|[_])*", "Javascript", "Identificador", 2, 10));
-        reporte.agregarToken(new Token("<", "<", "Html", "Etiquetas_de_Apertura", 10, 1));
-        reporte.agregarToken(new Token("contenedor", "[a-zA-Z]+", "Html", "Etiqueta", 11, 1));
-        reporte.agregarToken(new Token("function", "[a-zA-Z]+", "JavaScript", "Palabra Reservada", 2, 1));
-        reporte.agregarToken(new Token("errorToken", "[a-zA-Z]+", "HTML", "Error", 10, 5));
-    
-        
-        String resultadoReporte = reporte.generarReporte();
-        System.out.println(resultadoReporte);
-        
+        separarLenguajes();  
+
+    System.out.println("Contenido JS: " + jsContent);
+    System.out.println("Contenido HTML: " + htmlContent);
+
+    String patronPalabraReservadaJS = "\\b(function|let|var|if|else|for|while|return)\\b";
+    String patronIdentificadorJS = "[a-zA-Z]([a-zA-Z]|[0-9]|[_])*";
+    String patronEtiquetaHtml = "<[a-zA-Z]+>";
+    String patronError = "errorToken"; 
+
+    System.out.println("Analizando JavaScript...");
+    analizarTexto(jsContent, patronPalabraReservadaJS, "JavaScript", "Palabra Reservada");
+    analizarTexto(jsContent, patronIdentificadorJS, "JavaScript", "Identificador");
+
+    System.out.println("Analizando HTML...");
+    analizarTexto(htmlContent, patronEtiquetaHtml, "HTML", "Etiqueta de Apertura");
+    analizarTexto(htmlContent, patronError, "HTML", "Error");
+
+    String resultadoReporte = reporte.generarReporte();
+    System.out.println("Reporte generado:");
+    System.out.println(resultadoReporte);
     }
      
+    private void analizarTexto(String contenido, String patron, String lenguaje, String tipo) {
+    Pattern pattern = Pattern.compile(patron);
+    Matcher matcher = pattern.matcher(contenido);
+    int fila = 1; 
+    int columna = 1;
+    System.out.println("Buscando patrón: " + patron + " en " + lenguaje);
+    
+    while (matcher.find()) {
+        String tokenEncontrado = matcher.group();
+        System.out.println("Token encontrado: " + tokenEncontrado); 
+        reporte.agregarToken(new Token(tokenEncontrado, patron, lenguaje, tipo, fila, columna));
+        columna += tokenEncontrado.length();
+    }
+}
     
 
-    // Método para separar el contenido según el lenguaje (css, js, html)
+   
     private void separarLenguajes() {
         String[] lineas = textoEntrada.split("\n");
         StringBuilder cssBuilder = new StringBuilder();
         StringBuilder jsBuilder = new StringBuilder();
         StringBuilder htmlBuilder = new StringBuilder();
-
         String seccionActual = "";
-
         for (String linea : lineas) {
             
             if (linea.startsWith(">>[css]")) {

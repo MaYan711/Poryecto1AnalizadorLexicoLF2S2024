@@ -13,7 +13,6 @@ public class Token {
         
         this.token = token;
         this.expresionRegular = expresionRegular;
-        
         this.lenguaje = lenguaje;
         this.tipo = tipo;
         this.fila = fila;
